@@ -1,13 +1,13 @@
-// Licensed under the Dartastic Pro Software License Agreement.
+// Licensed under the Apache License, Version 2.0
 // Copyright 2025-2026 Mindful Software LLC d/b/a Dartastic.io, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 
 import 'otel_apns_suppression.dart';
 
 const _tracerName = 'dartastic_otel_libs_apns';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class ApnsResult {
   const ApnsResult({
@@ -92,62 +92,62 @@ Future<T> tracedApns<T>({
   final span = _tracer().startSpan(
     'apns $operation',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(m),
+    attributes: OTelAPI.attributesFromMap(m),
   );
   try {
     final r = await invoke();
     if (r.result != null) {
       final extras = <Attribute<Object>>[];
       if (r.result!.apnsId != null) {
-        extras.add(OTel.attributeString('apns.id', r.result!.apnsId!));
+        extras.add(OTelAPI.attributeString('apns.id', r.result!.apnsId!));
       }
       if (r.result!.topic != null) {
-        extras.add(OTel.attributeString('apns.topic', r.result!.topic!));
+        extras.add(OTelAPI.attributeString('apns.topic', r.result!.topic!));
       }
       if (r.result!.pushType != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'apns.push.type',
           r.result!.pushType!,
         ));
       }
       if (r.result!.priority != null) {
-        extras.add(OTel.attributeInt('apns.priority', r.result!.priority!));
+        extras.add(OTelAPI.attributeInt('apns.priority', r.result!.priority!));
       }
       if (r.result!.collapseId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'apns.collapse.id',
           r.result!.collapseId!,
         ));
       }
       if (r.result!.environment != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'apns.environment',
           r.result!.environment!,
         ));
       }
       if (r.result!.deviceToken != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'apns.device.token',
           r.result!.deviceToken!,
         ));
       }
       if (r.result!.payloadBytes != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'apns.payload.bytes',
           r.result!.payloadBytes!,
         ));
       }
       if (r.result!.reason != null) {
-        extras.add(OTel.attributeString('apns.reason', r.result!.reason!));
+        extras.add(OTelAPI.attributeString('apns.reason', r.result!.reason!));
       }
       if (r.result!.timestampMs != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'apns.unregistered.timestamp_ms',
           r.result!.timestampMs!,
         ));
       }
       if (r.result!.statusCode != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'http.response.status_code',
           r.result!.statusCode!,
         ));
@@ -159,13 +159,13 @@ Future<T> tracedApns<T>({
           );
         }
       }
-      if (extras.isNotEmpty) span.addAttributes(OTel.attributes(extras));
+      if (extras.isNotEmpty) span.addAttributes(OTelAPI.attributes(extras));
     }
     return r.value;
   } catch (e, st) {
-    span.addAttributes(OTel.attributes([
-      OTel.attributeString(
-        ErrorResource.errorType.key,
+    span.addAttributes(OTelAPI.attributes([
+      OTelAPI.attributeString(
+        ErrorAttributes.errorType.key,
         e.runtimeType.toString(),
       ),
     ]));
