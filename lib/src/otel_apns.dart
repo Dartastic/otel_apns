@@ -10,6 +10,7 @@ const _tracerName = 'dartastic_otel_libs_apns';
 APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class ApnsResult {
+  /// Creates a result.
   const ApnsResult({
     this.apnsId,
     this.topic,
@@ -66,8 +67,13 @@ class ApnsResult {
   final int? statusCode;
 }
 
+/// What a traced call returned: the value for the caller plus fields
+/// recorded on the span.
 class ApnsCallResult<T> {
+  /// Creates a call result.
   const ApnsCallResult({required this.value, this.result});
+
+  /// The value returned to the caller.
   final T value;
   final ApnsResult? result;
 }
